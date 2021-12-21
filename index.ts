@@ -1,7 +1,6 @@
 import express, { Express } from "express";
 import { connect } from "./middlewares/dbConnect";
 import {chefsRoute, restaurantsRoute, dishesRoute} from "routes/index";
-
 const app: Express = express();
 
 app.use("/api/chefs", chefsRoute);
