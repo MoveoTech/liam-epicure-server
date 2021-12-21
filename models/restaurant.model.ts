@@ -1,22 +1,21 @@
-import mongoose from "mongoose";
+import { Types, model, Schema } from "mongoose";
 
-export interface IRestaurants{
+export interface IRestaurant {
     imgUrl: string, // base64
-    header : string,
-    content:string,
-    chef: any,
-    dishes: any[],
-    signatureDish: any
+    name: string,
+    description: string,
+    chef: Types.ObjectId,
+    dishes: Types.ObjectId[],
+    signatureDish: Types.ObjectId
 }
 
-const Schema = mongoose.Schema;
-const RestaurantSchema = new Schema<IRestaurants>({
-    imgUrl: {type: String, required: true},
-    header: {type: String, required: true},
-    content: {type: String, required: true},
-    chef: {type: mongoose.Types.ObjectId, ref: "Chef"},
-    dishes: [{type: mongoose.Types.ObjectId, ref: "Dish"}],
-    signatureDish: {type: mongoose.Types.ObjectId, ref: "Dish"}
+const RestaurantSchema = new Schema<IRestaurant>({
+    imgUrl: { type: String, required: true },
+    name: { type: String, required: true },
+    description: { type: String },
+    chef: { type: Types.ObjectId, ref: "Chef", required: true },
+    dishes: [{ type: Types.ObjectId, ref: "Dish" }],
+    signatureDish: { type: Types.ObjectId, ref: "Dish", required: true }
 });
 
-export const RestaurantModel = mongoose.model("Restaurant", RestaurantSchema);
+export const RestaurantModel = model("Restaurant", RestaurantSchema);
