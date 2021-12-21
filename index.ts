@@ -8,6 +8,7 @@ app.use("/api/dishes", dishesRoute);
 app.use("/api/restaurants", restaurantsRoute);
 
 app.listen(5000, async () => {
+    
     console.log("Server is up.");
     await connect();
 });
