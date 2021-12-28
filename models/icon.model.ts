@@ -1,7 +1,7 @@
 import {model, Schema} from "mongoose";
 
 export interface IIcon{
-    imgUrl: string, // base64
+    imgUrl: string,
     meaning: string
 }
 
