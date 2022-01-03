@@ -1,22 +1,22 @@
 import { Types, model, Schema } from "mongoose";
 
 export interface IRestaurant {
-    imgUrl: string,
+    imgUrl: string | null,
     name: string,
-    description: string,
-    chef: Types.ObjectId | string,
-    dishes: Types.ObjectId[] | string[],
-    signatureDish: Types.ObjectId | string,
+    description: string |null,
+    chef: Types.ObjectId | string | null,
+    dishes: Types.ObjectId[] | string[] | null ,
+    signatureDish: Types.ObjectId | string | null,
     status: number
 }
 
 const RestaurantSchema = new Schema<IRestaurant>({
-    imgUrl: { type: String, required: true },
+    imgUrl: { type: String, default: null },
     name: { type: String, required: true },
     description: { type: String },
-    chef: { type: Types.ObjectId, ref: "Chef", required: true },
-    dishes: [{ type: Types.ObjectId, ref: "Dish" }],
-    signatureDish: { type: Types.ObjectId, ref: "Dish" },
+    chef: { type: Types.ObjectId, ref: "Chef" , default: null},
+    dishes: [{ type: Types.ObjectId, ref: "Dish" , default: null}],
+    signatureDish: { type: Types.ObjectId, ref: "Dish" , default: null},
     status: { type: Number, required: true }
 });
 

@@ -4,10 +4,30 @@ import { PopularRestaurantModel } from "models/popular-restaurant.model";
 import { Types } from "mongoose";
 import { DishModel } from "models/dish.model";
 import { ChefModel } from "models/chef.model";
+import { IconModel } from "models/icon.model";
 
 export const getAllRestaurants = async (req: Request, res: Response) => {
     try {
-        const result = await RestaurantModel.find({status: 1});
+        const result = await RestaurantModel.aggregate()
+            .match({ status: 1 })
+            .lookup({ from: ChefModel.collection.name, localField: "chef", foreignField: "_id", as: "chef" })
+            .unwind({ path: "$chef", preserveNullAndEmptyArrays: true })
+            .lookup({
+                from: DishModel.collection.name, localField: "dishes", foreignField: "_id", as: "dishes",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: IconModel.collection.name,
+                            localField: "icons",
+                            foreignField: "_id",
+                            as: "icons"
+                        }
+                    }
+                ]
+            })
+            .lookup({ from: DishModel.collection.name, localField: "signatureDish", foreignField: "_id", as: "signatureDish" })
+            .unwind({ path: "$signatureDish", preserveNullAndEmptyArrays: true })
+
         return res.send(result);
     } catch (error) {
         res.status(400).send(error);
@@ -18,7 +38,22 @@ export const getPopularRestaurants = async (req: Request, res: Response) => {
     try {
         const popularRestaurants = await PopularRestaurantModel.aggregate()
             .match({ status: 1 })
-            .lookup({ from: RestaurantModel.collection.name, localField: "restaurant", foreignField: "_id", as: "restaurant" })
+            .lookup({
+                from: RestaurantModel.collection.name, localField: "restaurant", foreignField: "_id", as: "restaurant",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: ChefModel.collection.name,
+                            localField: "chef",
+                            foreignField: "_id",
+                            as: "chef"
+                        }
+                    },
+                    {
+                        $unwind: "$chef"
+                    }
+                ]
+            })
             .unwind("restaurant")
             .lookup({
                 from: DishModel.collection.name,
@@ -51,7 +86,6 @@ export const getPopularRestaurants = async (req: Request, res: Response) => {
                 as: "restaurant.dishes"
             })
 
-        console.log(popularRestaurants);
         res.status(200).send(popularRestaurants);
     } catch (error) {
         res.status(400).send(error)
@@ -87,10 +121,14 @@ export const getRestaurantDishesById = async (req: Request, res: Response) => {
 
 export const postAddNewRestaurant = async (req: Request, res: Response) => {
     try {
+        console.log(req.body);
+
         const { restaurantModel, error } = validateAndGetModel(req.body);
         if (error) {
             return res.status(500).send(error);
         }
+        console.log(restaurantModel);
+
         const docResult = await RestaurantModel.collection.insertOne(restaurantModel);
         res.send(docResult);
     } catch (error) {
@@ -100,11 +138,11 @@ export const postAddNewRestaurant = async (req: Request, res: Response) => {
 
 export const putUpdateRestaurant = async (req: Request, res: Response) => {
     try {
+
         const { restaurantModel, error } = validateAndGetModel(req.body);
         if (error) {
             return res.status(500).send(error);
         }
-        console.log(restaurantModel);
 
         const docResult = await RestaurantModel.findOneAndUpdate({ _id: restaurantModel._id, status: 1 }, restaurantModel);
         res.send(docResult || "Failed to update.");
@@ -117,6 +155,9 @@ export const deleteRestaurant = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const objId = new Types.ObjectId(id);
+        if (!objId) {
+            throw new Error("Id not valid.");
+        }
         const actions = [];
 
         // Find and set the restaurant's status to 0.
@@ -124,7 +165,7 @@ export const deleteRestaurant = async (req: Request, res: Response) => {
             { _id: objId, status: 1 },
             { $set: { status: 0 } });
         if (!docResult1) {
-            return res.status(500).send("Restaurant not found.");
+            throw new Error("Restaurant not found.");
         }
         actions.push(docResult1);
 
@@ -146,8 +187,9 @@ export const deleteRestaurant = async (req: Request, res: Response) => {
         actions.push(docResult4);
 
         Promise.all(actions);
-        res.send("Document deleted successfully");
-    } catch (error) {
+        res.send({ result: true });
+    } catch (error: any) {
+        res.statusMessage = error.message;
         res.status(400).send(error);
     }
 }

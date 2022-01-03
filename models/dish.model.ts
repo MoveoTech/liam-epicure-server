@@ -1,23 +1,23 @@
 import { Types, model, Schema } from "mongoose";
 
 export interface IDish {
-    imgUrl: string, // base64
+    imgUrl: string | null, // base64
     name: string,
-    description: string,
-    price: number,
-    restaurant: Types.ObjectId | string,
+    description: string | null,
+    price: number | null,
+    restaurant: Types.ObjectId | string | null,
     icons: Types.ObjectId[] | string[],
     status: number
 }
 
 const DishSchema = new Schema<IDish>({
-    imgUrl: { type: String, required: true },
+    imgUrl: { type: String, default: null },
     name: { type: String, required: true },
-    description: { type: String, required: true },
-    price: { type: Number, required: true },
-    restaurant: {type: Types.ObjectId, ref: "Restaurant"},
+    description: { type: String },
+    price: { type: Number, default: null },
+    restaurant: { type: Types.ObjectId, ref: "Restaurant", default: null },
     icons: [{ type: Types.ObjectId, ref: "Icon" }],
-    status: {type: Number, required: true}
+    status: { type: Number, required: true }
 });
 
 export const DishModel = model("Dish", DishSchema);

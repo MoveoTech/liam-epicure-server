@@ -1,6 +1,6 @@
 import express, { Express } from "express";
 import { connect } from "./middlewares/dbConnect";
-import { chefsController, restaurantsController, dishesController } from "controllers/index";
+import { chefsController, restaurantsController, dishesController, iconsController } from "controllers/index";
 import cors from "cors";
 import bodyParser from "body-parser";
 const app: Express = express();
@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));// make sure url params are 
 app.use("/api/chefs", chefsController);
 app.use("/api/dishes", dishesController);
 app.use("/api/restaurants", restaurantsController);
+app.use("/api/icons", iconsController);
 
 app.listen(5000, async () => {
     console.log("Server is up.");

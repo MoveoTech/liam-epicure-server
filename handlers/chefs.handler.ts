@@ -8,7 +8,9 @@ import { Types } from "mongoose";
 
 export const getAllChefs = async (req: Request, res: Response) => {
     try {
-        const chefs = await ChefModel.find({ status: 1 });
+        const chefs = await ChefModel.aggregate()
+        .match({status: 1})
+        .lookup({from: RestaurantModel.collection.name, localField: "restaurants", foreignField: "_id", as: "restaurants"});
         res.send(chefs)
     } catch (error) {
         res.status(400).send(error);
@@ -120,6 +122,9 @@ export const deleteChef = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const objId = new Types.ObjectId(id);
+        if(!objId){
+            throw new Error("Id not valid.");
+        }
         const actions = [];
 
         // Set chef's status to 0.
@@ -129,7 +134,7 @@ export const deleteChef = async (req: Request, res: Response) => {
         );
 
         if(!docResult1){
-            return res.status(500).send("Chef not found.");
+            throw new Error("Chef not found");
         }
         actions.push(docResult1);
 
@@ -145,8 +150,9 @@ export const deleteChef = async (req: Request, res: Response) => {
         actions.push(docResult3);
 
         Promise.all(actions);
-        res.send("Chef deleted successfully.");
-    } catch (error) {
+        res.send({result: true});
+    } catch (error : any) {
+        res.statusMessage = error.message;
         res.status(400).send(error);
     }
 }

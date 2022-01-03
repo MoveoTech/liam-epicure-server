@@ -7,7 +7,11 @@ import { Types } from "mongoose";
 
 export const getAllDishes = async (req: Request, res: Response) => {
     try {
-        const dishes = await DishModel.find({ status: 1 });
+        const dishes = await DishModel.aggregate()
+        .match({status: 1})
+        .lookup({from: RestaurantModel.collection.name, localField: "restaurant", foreignField: "_id", as: "restaurant"})
+        .unwind({path: "$restaurant", preserveNullAndEmptyArrays: true})
+        .lookup({from: IconModel.collection.name, localField: "icons", foreignField: "_id", as: "icons"})
         res.send(dishes);
     } catch (error) {
         res.status(400).send(error);
@@ -57,8 +61,12 @@ export const putUpdateDish = async (req: Request, res: Response) => {
     try {
         const { dishModel, error } = validateAndGetModel(req.body);
         if (error) {
+            console.log(error);
+            
             return res.status(400).send(error);
         }
+        console.log(dishModel);
+        
         const docResult = await DishModel.findOneAndUpdate({ _id: dishModel._id, status: 1 }, dishModel);
         res.send(docResult || "Failed to update document.");
     } catch (error) {
@@ -77,8 +85,8 @@ export const deleteDish = async (req: Request, res: Response) => {
             { _id: objId, status: 1 },
             { $set: { status: 0 } }
         );
-        if(!docResult1){
-            return res.status(500).send("Dish not found.");
+        if (!docResult1) {
+            throw new Error("Dish not found");
         }
         actions.push(docResult1);
 
@@ -94,8 +102,9 @@ export const deleteDish = async (req: Request, res: Response) => {
         actions.push(docResult3);
 
         Promise.all(actions);
-        res.send("Dish deleted successfully.");
-    } catch (error) {
+        res.send({result: true});
+    } catch (error : any) {
+        res.statusMessage = error.message;
         res.status(400).send(error);
     }
 }
