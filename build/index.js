@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const dbConnect_1 = require("./middlewares/dbConnect");
+// import { connect } from "./middlewares/dbConnect";
 const index_1 = require("controllers/index");
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
@@ -22,5 +22,5 @@ app.use("/api/restaurants", index_1.restaurantsController);
 app.use("/api/icons", index_1.iconsController);
 app.listen(configFile_1.config.PORT, async () => {
     console.log("Server is up.");
-    await (0, dbConnect_1.connect)();
+    // await connect();
 });
