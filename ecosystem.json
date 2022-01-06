@@ -2,7 +2,7 @@
 	"apps": [
 		{
 			"name": "epicure",
-			"script": "./dist/server.js"
+			"script": "./build/index.js"
 		}
 	],
 	"deploy": {

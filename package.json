@@ -10,6 +10,14 @@
     "mongoose": "^6.1.2",
     "nodemon": "^2.0.15"
   },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "build": "babel --delete-dir-on-start --out-dir dist --copy-files --ignore \"*/_tests/*,/_mocks_/*,**/__mocks__/**\" --no-copy-ignored src",
+    "start:dev": "nodemon dist/server.js",
+    "build:dev": "tsc --watch --preserveWatchOutput",
+    "dev": "concurrently \"npm:build:dev\" \"npm:start:dev\""
+  },
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/jsonwebtoken": "^8.5.6",
