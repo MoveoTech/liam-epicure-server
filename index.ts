@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-// import { connect } from "./middlewares/dbConnect";
+import { connect } from "./middlewares/dbConnect";
 import { chefsController, restaurantsController, dishesController, iconsController, usersController } from "controllers/index";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -20,5 +20,5 @@ app.use("/api/icons", iconsController);
 
 app.listen(config.PORT, async () => {
     console.log("Server is up.");
-    // await connect();
+    await connect();
 });
