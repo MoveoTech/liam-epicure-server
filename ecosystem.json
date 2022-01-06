@@ -7,7 +7,7 @@
 	],
 	"deploy": {
 		"staging": {
-			"key": "/Users/liamsteiner/.ssh/EpicurePairKey.pem",
+			"key": "/Users/liamsteiner/Desktop/AWS/Epicure/EpicurePairKey.pem",
 			"user": "ubuntu",
 
 
