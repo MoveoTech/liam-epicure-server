@@ -1,0 +1,26 @@
+{
+	"apps": [
+		{
+			"name": "epicure",
+			"script": "./dist/server.js"
+		}
+	],
+	"deploy": {
+		"staging": {
+			"key": "/Users/liamsteiner/.ssh/EpicurePairKey.pem",
+			"user": "ubuntu",
+
+
+			"host": ["ec2-3-83-86-227.compute-1.amazonaws.com"],
+
+
+			"ref": "origin/main",
+
+
+			"repo": "git@github.com:MoveoTech/liam-epicure-server.git",
+
+
+			"path": "/home/ubuntu/server"
+        }
+    }
+}
