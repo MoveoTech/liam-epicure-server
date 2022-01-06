@@ -9,11 +9,11 @@ import { Types } from "mongoose";
 export const getAllChefs = async (req: Request, res: Response) => {
     try {
         const chefs = await ChefModel.aggregate()
-        .match({status: 1})
-        .lookup({from: RestaurantModel.collection.name, localField: "restaurants", foreignField: "_id", as: "restaurants"});
+            .match({ status: 1 })
+            .lookup({ from: RestaurantModel.collection.name, localField: "restaurants", foreignField: "_id", as: "restaurants" });
         res.send(chefs)
-    } catch (error) {
-        res.status(400).send(error);
+    } catch (error: any) {
+        res.status(500).send(error);
     }
 }
 
@@ -69,24 +69,41 @@ export const getChefById = async (req: Request, res: Response) => {
                 as: "restaurants"
             })
         res.send(chef)
-    } catch (error) {
-        res.status(400).send(error);
+    } catch (error: any) {
+        res.status(500).send(error);
     }
 }
 
 export const getWeeklyChef = async (req: Request, res: Response) => {
     try {
         const chef = await WeeklyChefModel.aggregate()
-            .lookup({ from: ChefModel.collection.name, localField: "chef", foreignField: "_id", as: "chef" })
             .match({ status: 1 })
-            .unwind("chef")
             .lookup({
-                from: "restaurants", localField: "chef.restaurants", foreignField: "_id", as: "chef.restaurants",
-                pipeline: [{ $unset: ["chef", "dishes", "signatureDish"] }]
-            })
+                from: ChefModel.collection.name,
+                let: { chef: "$chef" },
+                as: "chef",
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: ["$$chef", "$_id"]
+                            }
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: RestaurantModel.collection.name,
+                            localField: "restaurants",
+                            foreignField: "_id",
+                            as: "restaurants"
+                        }
+                    }
+                ]
+            }).unwind("chef");
+
         res.send(chef);
-    } catch (error) {
-        res.status(400).send(error);
+    } catch (error: any) {
+        res.status(500).send(error);
     }
 }
 
@@ -99,7 +116,7 @@ export const postAddNewChef = async (req: Request, res: Response) => {
 
         const docResult = await ChefModel.collection.insertOne(chefModel);
         res.send(docResult);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).send(error);
     }
 }
@@ -113,8 +130,8 @@ export const putUpdateChef = async (req: Request, res: Response) => {
 
         const docResult = await ChefModel.findOneAndUpdate({ _id: chefModel._id, status: 1 }, chefModel);
         res.send(docResult);
-    } catch (error) {
-        res.status(400).send(error);
+    } catch (error: any) {
+        res.status(500).send(error);
     }
 }
 
@@ -122,7 +139,7 @@ export const deleteChef = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const objId = new Types.ObjectId(id);
-        if(!objId){
+        if (!objId) {
             throw new Error("Id not valid.");
         }
         const actions = [];
@@ -133,7 +150,7 @@ export const deleteChef = async (req: Request, res: Response) => {
             { $set: { status: 0 } }
         );
 
-        if(!docResult1){
+        if (!docResult1) {
             throw new Error("Chef not found");
         }
         actions.push(docResult1);
@@ -150,10 +167,10 @@ export const deleteChef = async (req: Request, res: Response) => {
         actions.push(docResult3);
 
         Promise.all(actions);
-        res.send({result: true});
-    } catch (error : any) {
+        res.send({ result: true });
+    } catch (error: any) {
         res.statusMessage = error.message;
-        res.status(400).send(error);
+        res.status(500).send(error);
     }
 }
 

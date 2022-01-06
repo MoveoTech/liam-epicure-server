@@ -7,7 +7,7 @@ export const getAllIcons = async (req: Request, res: Response) => {
     try {
         const icons = await IconModel.find({ status: 1 });
         res.send(icons)
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).send(error);
     }
 }
@@ -17,7 +17,7 @@ export const getIconById = async (req: Request, res: Response) => {
         const { id } = req.params;
         const icon = await IconModel.findOne({ _id: new Types.ObjectId(id), status: 1 });
         res.send(icon);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).send(error);
     }
 }
@@ -30,7 +30,7 @@ export const putUpdateIcon = async (req: Request, res: Response) => {
         }
         const docResult = await IconModel.findOneAndUpdate({ _id: iconModel._id, status: 1 }, iconModel);
         res.send(docResult);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).send(error);
     }
 }
@@ -44,7 +44,7 @@ export const postAddIcon = async (req: Request, res: Response) => {
 
         const docResult = await IconModel.collection.insertOne(iconModel);
         res.send(docResult);
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).send(error);
     }
 }
@@ -74,7 +74,7 @@ export const deleteIcon = async (req: Request, res: Response) => {
 
         res.send("Icon deleted successfully.");
 
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).send(error);
     }
 }

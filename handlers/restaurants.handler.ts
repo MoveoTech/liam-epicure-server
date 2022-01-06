@@ -13,8 +13,15 @@ export const getAllRestaurants = async (req: Request, res: Response) => {
             .lookup({ from: ChefModel.collection.name, localField: "chef", foreignField: "_id", as: "chef" })
             .unwind({ path: "$chef", preserveNullAndEmptyArrays: true })
             .lookup({
-                from: DishModel.collection.name, localField: "dishes", foreignField: "_id", as: "dishes",
+                from: DishModel.collection.name, let: { dishes: "$dishes" }, as: "dishes",
                 pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $in: ["$_id", "$$dishes"]
+                            }
+                        }
+                    },
                     {
                         $lookup: {
                             from: IconModel.collection.name,
@@ -29,8 +36,8 @@ export const getAllRestaurants = async (req: Request, res: Response) => {
             .unwind({ path: "$signatureDish", preserveNullAndEmptyArrays: true })
 
         return res.send(result);
-    } catch (error) {
-        res.status(400).send(error);
+    } catch (error: any) {
+        res.status(500).send(error);
     }
 }
 
@@ -39,8 +46,15 @@ export const getPopularRestaurants = async (req: Request, res: Response) => {
         const popularRestaurants = await PopularRestaurantModel.aggregate()
             .match({ status: 1 })
             .lookup({
-                from: RestaurantModel.collection.name, localField: "restaurant", foreignField: "_id", as: "restaurant",
+                from: RestaurantModel.collection.name, let: {restaurant: "$restaurant"}, as: "restaurant",
                 pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: ["$$restaurant", "$_id"]
+                            }
+                        }
+                    },
                     {
                         $lookup: {
                             from: ChefModel.collection.name,
@@ -87,8 +101,8 @@ export const getPopularRestaurants = async (req: Request, res: Response) => {
             })
 
         res.status(200).send(popularRestaurants);
-    } catch (error) {
-        res.status(400).send(error)
+    } catch (error: any) {
+        res.status(500).send(error)
     }
 }
 
@@ -100,8 +114,8 @@ export const getRestaurantById = async (req: Request, res: Response) => {
         restaurant
             ? res.status(200).send(restaurant)
             : res.status(400).send("Restaurant not found.");
-    } catch (error) {
-        res.status(400).send(error);
+    } catch (error: any) {
+        res.status(500).send(error);
     }
 }
 
@@ -114,25 +128,25 @@ export const getRestaurantDishesById = async (req: Request, res: Response) => {
             .unwind("dishes")
             .lookup({ from: "icons", localField: "dishes.icons", foreignField: "_id", as: "dishes.icons" });
         res.send(dishes);
-    } catch (error) {
-        res.status(400).send(error);
+    } catch (error: any) {
+        res.status(500).send(error);
     }
 }
 
 export const postAddNewRestaurant = async (req: Request, res: Response) => {
     try {
+        console.log(req.user);
         console.log(req.body);
 
         const { restaurantModel, error } = validateAndGetModel(req.body);
         if (error) {
-            return res.status(500).send(error);
+            throw new Error(error.message);
         }
-        console.log(restaurantModel);
 
         const docResult = await RestaurantModel.collection.insertOne(restaurantModel);
         res.send(docResult);
-    } catch (error) {
-        res.status(400).send(error);
+    } catch (error: any) {
+        res.status(500).send(error);
     }
 }
 
@@ -146,8 +160,8 @@ export const putUpdateRestaurant = async (req: Request, res: Response) => {
 
         const docResult = await RestaurantModel.findOneAndUpdate({ _id: restaurantModel._id, status: 1 }, restaurantModel);
         res.send(docResult || "Failed to update.");
-    } catch (error) {
-        res.status(400).send(error);
+    } catch (error: any) {
+        res.status(500).send(error);
     }
 }
 
@@ -190,7 +204,7 @@ export const deleteRestaurant = async (req: Request, res: Response) => {
         res.send({ result: true });
     } catch (error: any) {
         res.statusMessage = error.message;
-        res.status(400).send(error);
+        res.status(500).send(error);
     }
 }
 
