@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { config } from "configFile";
+import { config } from "../configFile";
 import { NextFunction, Request, Response } from "express";
-import { UserModel } from "models/user.model";
+import { UserModel } from "../models/user.model";
 import { Types } from "mongoose";
 
 interface IJwtResult extends JwtPayload {

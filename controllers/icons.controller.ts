@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import { getAllIcons, postAddIcon, putUpdateIcon, deleteIcon, getIconById } from "handlers/icons.handler";
-import auth from "middlewares/routeAuth";
+import { getAllIcons, postAddIcon, putUpdateIcon, deleteIcon, getIconById } from "../handlers/icons.handler";
+import auth from "../middlewares/routeAuth";
 const router: Router = express.Router();
 
 router.get("", getAllIcons); // No auth for Epicure users

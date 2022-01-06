@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { ChefModel, IChef } from "models/chef.model";
-import { DishModel } from "models/dish.model";
-import { IconModel } from "models/icon.model";
-import { RestaurantModel } from "models/restaurant.model";
-import { WeeklyChefModel } from "models/weekly-chef.model";
+import { ChefModel, IChef } from "../models/chef.model";
+import { DishModel } from "../models/dish.model";
+import { IconModel } from "../models/icon.model";
+import { RestaurantModel } from "../models/restaurant.model";
+import { WeeklyChefModel } from "../models/weekly-chef.model";
 import { Types } from "mongoose";
 
 export const getAllChefs = async (req: Request, res: Response) => {

@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const configFile_1 = require("configFile");
-const user_model_1 = require("models/user.model");
+const configFile_1 = require("../configFile");
+const user_model_1 = require("../models/user.model");
 const mongoose_1 = require("mongoose");
 const verifyToken = async (req, res, next) => {
     try {

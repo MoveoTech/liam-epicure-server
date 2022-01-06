@@ -1,5 +1,4 @@
 {
-  "main": "./",
   "dependencies": {
     "@types/express": "^4.17.13",
     "@types/mongoose": "^5.11.97",

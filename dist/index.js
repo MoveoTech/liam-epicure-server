@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dbConnect_1 = require("./middlewares/dbConnect");
-const index_1 = require("controllers/index");
+const index_1 = require("./controllers/index");
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
-const configFile_1 = require("configFile");
+const configFile_1 = require("./configFile");
 const app = (0, express_1.default)();
 // Middlewares
 app.use((0, cors_1.default)());

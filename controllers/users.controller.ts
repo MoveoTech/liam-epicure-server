@@ -1,7 +1,7 @@
 import express, { Router } from "express";
-import { postLogin } from "handlers/users.handler";
-import loginAuth from "middlewares/loginAuth";
-import guardRoute from "middlewares/guardAuth";
+import { postLogin } from "../handlers/users.handler";
+import loginAuth from "../middlewares/loginAuth";
+import guardRoute from "../middlewares/guardAuth";
 const router: Router = express.Router();
 
 router.get("", guardRoute);

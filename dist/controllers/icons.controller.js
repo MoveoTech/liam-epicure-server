@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const icons_handler_1 = require("handlers/icons.handler");
-const routeAuth_1 = __importDefault(require("middlewares/routeAuth"));
+const icons_handler_1 = require("../handlers/icons.handler");
+const routeAuth_1 = __importDefault(require("../middlewares/routeAuth"));
 const router = express_1.default.Router();
 router.get("", icons_handler_1.getAllIcons); // No auth for Epicure users
 router.post("", routeAuth_1.default, icons_handler_1.postAddIcon);

@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import { deleteRestaurant, getAllRestaurants, getPopularRestaurants, getRestaurantById, getRestaurantDishesById, postAddNewRestaurant, putUpdateRestaurant } from "handlers/restaurants.handler";
-import auth from "middlewares/routeAuth";
+import { deleteRestaurant, getAllRestaurants, getPopularRestaurants, getRestaurantById, getRestaurantDishesById, postAddNewRestaurant, putUpdateRestaurant } from "../handlers/restaurants.handler";
+import auth from "../middlewares/routeAuth";
 const router: Router = express.Router();
 
 // Get all restaurants

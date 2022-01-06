@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import { deleteChef, getAllChefs, getChefById, getWeeklyChef, postAddNewChef, putUpdateChef } from "handlers/chefs.handler";
-import auth from "middlewares/routeAuth";
+import { deleteChef, getAllChefs, getChefById, getWeeklyChef, postAddNewChef, putUpdateChef } from "../handlers/chefs.handler";
+import auth from "../middlewares/routeAuth";
 const router: Router = express.Router();
 
 // Get all chefs

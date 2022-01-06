@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const auth_service_1 = require("services/auth.service");
+const auth_service_1 = require("../services/auth.service");
 const guardAuth = (req, res, next) => {
     try {
         const token = req.headers["access-token"]?.toString();

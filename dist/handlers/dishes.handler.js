@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDish = exports.putUpdateDish = exports.postAddNewDish = exports.getSignatureDishes = exports.getDishById = exports.getAllDishes = void 0;
-const dish_model_1 = require("models/dish.model");
-const icon_model_1 = require("models/icon.model");
-const restaurant_model_1 = require("models/restaurant.model");
-const signature_dish_model_1 = require("models/signature-dish.model");
+const dish_model_1 = require("../models/dish.model");
+const icon_model_1 = require("../models/icon.model");
+const restaurant_model_1 = require("../models/restaurant.model");
+const signature_dish_model_1 = require("../models/signature-dish.model");
 const mongoose_1 = require("mongoose");
 const getAllDishes = async (req, res) => {
     try {

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteIcon = exports.postAddIcon = exports.putUpdateIcon = exports.getIconById = exports.getAllIcons = void 0;
-const dish_model_1 = require("models/dish.model");
-const icon_model_1 = require("models/icon.model");
+const dish_model_1 = require("../models/dish.model");
+const icon_model_1 = require("../models/icon.model");
 const mongoose_1 = require("mongoose");
 const getAllIcons = async (req, res) => {
     try {

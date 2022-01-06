@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteChef = exports.putUpdateChef = exports.postAddNewChef = exports.getWeeklyChef = exports.getChefById = exports.getAllChefs = void 0;
-const chef_model_1 = require("models/chef.model");
-const dish_model_1 = require("models/dish.model");
-const icon_model_1 = require("models/icon.model");
-const restaurant_model_1 = require("models/restaurant.model");
-const weekly_chef_model_1 = require("models/weekly-chef.model");
+const chef_model_1 = require("../models/chef.model");
+const dish_model_1 = require("../models/dish.model");
+const icon_model_1 = require("../models/icon.model");
+const restaurant_model_1 = require("../models/restaurant.model");
+const weekly_chef_model_1 = require("../models/weekly-chef.model");
 const mongoose_1 = require("mongoose");
 const getAllChefs = async (req, res) => {
     try {

@@ -1,10 +1,10 @@
 import { Response, Request } from "express";
-import { IRestaurant, RestaurantModel } from "models/restaurant.model";
-import { PopularRestaurantModel } from "models/popular-restaurant.model";
+import { IRestaurant, RestaurantModel } from "../models/restaurant.model";
+import { PopularRestaurantModel } from "../models/popular-restaurant.model";
 import { Types } from "mongoose";
-import { DishModel } from "models/dish.model";
-import { ChefModel } from "models/chef.model";
-import { IconModel } from "models/icon.model";
+import { DishModel } from "../models/dish.model";
+import { ChefModel } from "../models/chef.model";
+import { IconModel } from "../models/icon.model";
 
 export const getAllRestaurants = async (req: Request, res: Response) => {
     try {

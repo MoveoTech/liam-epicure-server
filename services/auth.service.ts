@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { config } from "configFile";
+import { config } from "../configFile";
 
 export const verifyToken = (token: string | undefined): string | jwt.JwtPayload => {
     if (!token) {

@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const chefs_handler_1 = require("handlers/chefs.handler");
-const routeAuth_1 = __importDefault(require("middlewares/routeAuth"));
+const chefs_handler_1 = require("../handlers/chefs.handler");
+const routeAuth_1 = __importDefault(require("../middlewares/routeAuth"));
 const router = express_1.default.Router();
 // Get all chefs
 router.get("", routeAuth_1.default, chefs_handler_1.getAllChefs);

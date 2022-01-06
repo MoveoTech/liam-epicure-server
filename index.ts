@@ -1,9 +1,9 @@
 import express, { Express } from "express";
 import { connect } from "./middlewares/dbConnect";
-import { chefsController, restaurantsController, dishesController, iconsController, usersController } from "controllers/index";
+import { chefsController, restaurantsController, dishesController, iconsController, usersController } from "./controllers/index";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { config } from "configFile";
+import { config } from "./configFile";
 const app: Express = express();
 
 // Middlewares

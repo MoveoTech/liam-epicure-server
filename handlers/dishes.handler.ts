@@ -1,8 +1,8 @@
 import { Response, Request } from "express";
-import { DishModel, IDish } from "models/dish.model";
-import { IconModel } from "models/icon.model";
-import { RestaurantModel } from "models/restaurant.model";
-import { SignatureDishModel } from "models/signature-dish.model";
+import { DishModel, IDish } from "../models/dish.model";
+import { IconModel } from "../models/icon.model";
+import { RestaurantModel } from "../models/restaurant.model";
+import { SignatureDishModel } from "../models/signature-dish.model";
 import { Types } from "mongoose";
 
 export const getAllDishes = async (req: Request, res: Response) => {

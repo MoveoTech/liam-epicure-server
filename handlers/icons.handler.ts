@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { DishModel } from "models/dish.model";
-import { IconModel, IIcon } from "models/icon.model";
+import { DishModel } from "../models/dish.model";
+import { IconModel, IIcon } from "../models/icon.model";
 import { Types } from "mongoose";
 
 export const getAllIcons = async (req: Request, res: Response) => {

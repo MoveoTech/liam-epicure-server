@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verifyToken } from "services/auth.service";
+import { verifyToken } from "../services/auth.service";
 
 const guardAuth = (req: Request, res: Response, next: NextFunction) => {
     try {

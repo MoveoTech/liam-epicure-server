@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteRestaurant = exports.putUpdateRestaurant = exports.postAddNewRestaurant = exports.getRestaurantDishesById = exports.getRestaurantById = exports.getPopularRestaurants = exports.getAllRestaurants = void 0;
-const restaurant_model_1 = require("models/restaurant.model");
-const popular_restaurant_model_1 = require("models/popular-restaurant.model");
+const restaurant_model_1 = require("../models/restaurant.model");
+const popular_restaurant_model_1 = require("../models/popular-restaurant.model");
 const mongoose_1 = require("mongoose");
-const dish_model_1 = require("models/dish.model");
-const chef_model_1 = require("models/chef.model");
-const icon_model_1 = require("models/icon.model");
+const dish_model_1 = require("../models/dish.model");
+const chef_model_1 = require("../models/chef.model");
+const icon_model_1 = require("../models/icon.model");
 const getAllRestaurants = async (req, res) => {
     try {
         const result = await restaurant_model_1.RestaurantModel.aggregate()

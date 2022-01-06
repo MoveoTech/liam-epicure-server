@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import { getAllDishes, getDishById, getSignatureDishes, postAddNewDish, putUpdateDish, deleteDish } from "handlers/dishes.handler";
-import auth from "middlewares/routeAuth";
+import { getAllDishes, getDishById, getSignatureDishes, postAddNewDish, putUpdateDish, deleteDish } from "../handlers/dishes.handler";
+import auth from "../middlewares/routeAuth";
 const router: Router = express.Router();
 
 // Get all dishes
