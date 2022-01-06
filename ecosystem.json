@@ -9,18 +9,18 @@
 		"staging": {
 			"key": "/Users/liamsteiner/Desktop/AWS/Epicure/EpicurePairKey.pem",
 			"user": "ubuntu",
-
-
-			"host": ["ec2-3-83-86-227.compute-1.amazonaws.com"],
-
-
+			"host": [
+				"ec2-3-83-86-227.compute-1.amazonaws.com"
+			],
 			"ref": "origin/main",
-
-
 			"repo": "git@github.com:MoveoTech/liam-epicure-server.git",
-
-
-			"path": "/home/ubuntu/server"
-        }
-    }
+			"path": "/home/ubuntu/server",
+			"ssh_options": "StrictHostKeyChecking=no",
+			"post-deploy": "mkdir -p logs && npm i && pm2 reload ecosystem.json --env staging",
+			"pre-deploy-local": "echo 'Deploying code to servers'",
+			"env": {
+				"NODE_ENV": "staging"
+			}
+		}
+	}
 }
