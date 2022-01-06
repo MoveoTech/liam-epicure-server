@@ -14,7 +14,7 @@
 			"host": ["ec2-3-83-86-227.compute-1.amazonaws.com"],
 
 
-			"ref": "origin/develop",
+			"ref": "origin/main",
 
 
 			"repo": "git@github.com:MoveoTech/liam-epicure-server.git",
