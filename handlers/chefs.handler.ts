@@ -38,7 +38,7 @@ export const getChefById = async (req: Request, res: Response) => {
                             from: DishModel.collection.name,
                             localField: "signatureDish",
                             foreignField: "_id",
-                            as: "signatureDish"
+                            as: "signatureDish",
                         }
                     },
                     {
