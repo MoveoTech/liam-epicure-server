@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { IUser, UserModel } from "models/user.model";
-import { config } from "config";
+import { config } from "configFile";
 import jwt from "jsonwebtoken";
 
 export const postLogin = async (req: Request, res: Response) => {

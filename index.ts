@@ -3,7 +3,7 @@ import { connect } from "./middlewares/dbConnect";
 import { chefsController, restaurantsController, dishesController, iconsController, usersController } from "controllers/index";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { config } from "config";
+import { config } from "configFile";
 const app: Express = express();
 
 // Middlewares

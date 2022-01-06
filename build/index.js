@@ -8,7 +8,7 @@ const dbConnect_1 = require("./middlewares/dbConnect");
 const index_1 = require("controllers/index");
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
-const config_1 = require("config");
+const configFile_1 = require("configFile");
 const app = (0, express_1.default)();
 // Middlewares
 app.use((0, cors_1.default)());
@@ -20,7 +20,7 @@ app.use("/api/chefs", index_1.chefsController);
 app.use("/api/dishes", index_1.dishesController);
 app.use("/api/restaurants", index_1.restaurantsController);
 app.use("/api/icons", index_1.iconsController);
-app.listen(config_1.config.PORT, async () => {
+app.listen(configFile_1.config.PORT, async () => {
     console.log("Server is up.");
     await (0, dbConnect_1.connect)();
 });

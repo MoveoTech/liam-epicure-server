@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postLogin = void 0;
 const user_model_1 = require("models/user.model");
-const config_1 = require("config");
+const configFile_1 = require("configFile");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const postLogin = async (req, res) => {
     try {
@@ -24,7 +24,7 @@ const postLogin = async (req, res) => {
             throw new Error("Wrong password.");
         }
         // Assign a token
-        const token = jsonwebtoken_1.default.sign({ id: user._id, username: user.username }, config_1.config.JWT_KEY, { expiresIn: "3h" });
+        const token = jsonwebtoken_1.default.sign({ id: user._id, username: user.username }, configFile_1.config.JWT_KEY, { expiresIn: "3h" });
         user.token = token;
         await user.save();
         res.status(200).json(user);

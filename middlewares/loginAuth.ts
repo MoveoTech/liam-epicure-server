@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { config } from "config";
+import { config } from "configFile";
 import { NextFunction, Request, Response } from "express";
 import { UserModel } from "models/user.model";
 import { Types } from "mongoose";

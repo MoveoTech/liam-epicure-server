@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = require("config");
+const configFile_1 = require("configFile");
 const verifyToken = (token) => {
     if (!token) {
         throw new Error("A token is required for authentication");
     }
     // If not verified - will throw an error 'jwt malformed'
-    return jsonwebtoken_1.default.verify(token, config_1.config.JWT_KEY);
+    return jsonwebtoken_1.default.verify(token, configFile_1.config.JWT_KEY);
 };
 exports.verifyToken = verifyToken;
