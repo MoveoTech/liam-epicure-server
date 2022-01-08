@@ -11,6 +11,8 @@ const router = express_1.default.Router();
 router.get("", routeAuth_1.default, restaurants_handler_1.getAllRestaurants);
 // Get popular restaurants
 router.get("/popular-restaurants", restaurants_handler_1.getPopularRestaurants); // No auth for Epicure users
+// Update popular restaurants (ADD AUTH MW)
+router.put("/popular-restaurants", routeAuth_1.default, restaurants_handler_1.putUpdatePopularRestaurants);
 // Add a new restaurant to collection
 router.post("", routeAuth_1.default, restaurants_handler_1.postAddNewRestaurant);
 // Update restaurant by body object

@@ -11,6 +11,8 @@ const router = express_1.default.Router();
 router.get("", routeAuth_1.default, chefs_handler_1.getAllChefs);
 // Get 'chef of the week'
 router.get("/weekly-chef", chefs_handler_1.getWeeklyChef); // No Auth MW for Epicure users
+// Update weekly chef
+router.put("/weekly-chef", routeAuth_1.default, chefs_handler_1.putWeeklyChef);
 // Add new chef to collection
 router.post("", routeAuth_1.default, chefs_handler_1.postAddNewChef);
 // Update chef by body object

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteChef = exports.putUpdateChef = exports.postAddNewChef = exports.getWeeklyChef = exports.getChefById = exports.getAllChefs = void 0;
+exports.deleteChef = exports.putUpdateChef = exports.postAddNewChef = exports.putWeeklyChef = exports.getWeeklyChef = exports.getChefById = exports.getAllChefs = void 0;
 const chef_model_1 = require("../models/chef.model");
 const dish_model_1 = require("../models/dish.model");
 const icon_model_1 = require("../models/icon.model");
@@ -102,7 +102,8 @@ const getWeeklyChef = async (req, res) => {
                     }
                 }
             ]
-        }).unwind("chef");
+        })
+            .unwind("chef");
         res.send(chef);
     }
     catch (error) {
@@ -110,6 +111,34 @@ const getWeeklyChef = async (req, res) => {
     }
 };
 exports.getWeeklyChef = getWeeklyChef;
+const putWeeklyChef = async (req, res) => {
+    try {
+        console.log(req.body);
+        const chefObj = req.body;
+        const { error } = validateAndGetModel(chefObj);
+        if (error) {
+            throw new Error(error.message);
+        }
+        // Create a new Weekly Chef object.
+        const chefModel = new weekly_chef_model_1.WeeklyChefModel({ chef: chefObj, status: 1 });
+        // Delete and check results.
+        const deleteResult = await weekly_chef_model_1.WeeklyChefModel.deleteMany();
+        if (!deleteResult) {
+            throw new Error("Couldn't delete weekly chefs.");
+        }
+        // Insert new chef and check results.
+        const insertResult = await weekly_chef_model_1.WeeklyChefModel.insertMany(chefModel);
+        if (!insertResult) {
+            throw new Error("Couldn't insert weekly chefs.");
+        }
+        res.send(insertResult);
+    }
+    catch (error) {
+        res.statusMessage = error.message;
+        res.status(500).send(error);
+    }
+};
+exports.putWeeklyChef = putWeeklyChef;
 const postAddNewChef = async (req, res) => {
     try {
         const { chefModel, error } = validateAndGetModel(req.body);

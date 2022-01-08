@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteDish = exports.putUpdateDish = exports.postAddNewDish = exports.getSignatureDishes = exports.getDishById = exports.getAllDishes = void 0;
+exports.deleteDish = exports.putUpdateDish = exports.postAddNewDish = exports.putSignatureDishes = exports.getSignatureDishes = exports.getDishById = exports.getAllDishes = void 0;
 const dish_model_1 = require("../models/dish.model");
 const icon_model_1 = require("../models/icon.model");
 const restaurant_model_1 = require("../models/restaurant.model");
@@ -45,6 +45,39 @@ const getSignatureDishes = async (req, res) => {
     }
 };
 exports.getSignatureDishes = getSignatureDishes;
+const putSignatureDishes = async (req, res) => {
+    try {
+        const dishObjs = req.body;
+        // Verify body data and return an IRestaurant interface.
+        const dishes = dishObjs.map((dish) => {
+            const { error } = validateAndGetModel(dish);
+            if (error) {
+                throw new Error(error.message);
+            }
+            return dish;
+        });
+        // Convert IDish interfaces to a SignatureDishModel
+        const signatureDishModels = dishes.map((dish) => {
+            return new signature_dish_model_1.SignatureDishModel({ dish, status: 1 });
+        });
+        // Delete all existing popular restaurants
+        const deleteResult = await signature_dish_model_1.SignatureDishModel.deleteMany();
+        if (!deleteResult) {
+            throw new Error("Couldn't delete popular restaurants.");
+        }
+        // Insert new restaurants
+        const insertResult = await signature_dish_model_1.SignatureDishModel.insertMany(signatureDishModels);
+        if (!insertResult) {
+            throw new Error("Couldn't insert new popular restaurants");
+        }
+        res.status(200).send(insertResult);
+    }
+    catch (error) {
+        res.statusMessage = error.message;
+        res.status(500).send(error);
+    }
+};
+exports.putSignatureDishes = putSignatureDishes;
 const postAddNewDish = async (req, res) => {
     try {
         const { dishModel, error } = validateAndGetModel(req.body);

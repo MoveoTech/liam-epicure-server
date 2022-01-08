@@ -11,6 +11,8 @@ const router = express_1.default.Router();
 router.get("", routeAuth_1.default, dishes_handler_1.getAllDishes);
 // Get signature dishes
 router.get("/signature-dishes", dishes_handler_1.getSignatureDishes); // No auth for Epicure users
+// Update signature dishes
+router.put("/signature-dishes", routeAuth_1.default, dishes_handler_1.putSignatureDishes);
 // Add new chef to collection
 router.post("", routeAuth_1.default, dishes_handler_1.postAddNewDish);
 // Update chef by body object

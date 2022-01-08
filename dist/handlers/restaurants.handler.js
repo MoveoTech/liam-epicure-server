@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRestaurant = exports.putUpdateRestaurant = exports.postAddNewRestaurant = exports.getRestaurantDishesById = exports.getRestaurantById = exports.getPopularRestaurants = exports.getAllRestaurants = void 0;
+exports.deleteRestaurant = exports.putUpdateRestaurant = exports.postAddNewRestaurant = exports.getRestaurantDishesById = exports.getRestaurantById = exports.putUpdatePopularRestaurants = exports.getPopularRestaurants = exports.getAllRestaurants = void 0;
 const restaurant_model_1 = require("../models/restaurant.model");
 const popular_restaurant_model_1 = require("../models/popular-restaurant.model");
 const mongoose_1 = require("mongoose");
@@ -107,6 +107,39 @@ const getPopularRestaurants = async (req, res) => {
     }
 };
 exports.getPopularRestaurants = getPopularRestaurants;
+const putUpdatePopularRestaurants = async (req, res) => {
+    try {
+        const restObjs = req.body;
+        // Verify body data and return an IRestaurant interface.
+        const restaurants = restObjs.map((restaurant) => {
+            const { error } = validateAndGetModel(restaurant);
+            if (error) {
+                throw new Error(error.message);
+            }
+            return restaurant;
+        });
+        // Convert IRestaurant interfaces to a PopularRestaurantModel
+        const popularRestaurantModels = restaurants.map((rest) => {
+            return new popular_restaurant_model_1.PopularRestaurantModel({ restaurant: rest, status: 1 });
+        });
+        // Delete all existing popular restaurants
+        const deleteResult = await popular_restaurant_model_1.PopularRestaurantModel.deleteMany();
+        if (!deleteResult) {
+            throw new Error("Couldn't delete popular restaurants.");
+        }
+        // Insert new restaurants
+        const insertResult = await popular_restaurant_model_1.PopularRestaurantModel.insertMany(popularRestaurantModels);
+        if (!insertResult) {
+            throw new Error("Couldn't insert new popular restaurants");
+        }
+        res.status(200).send(insertResult);
+    }
+    catch (error) {
+        res.statusMessage = error.message;
+        res.status(500).send(error);
+    }
+};
+exports.putUpdatePopularRestaurants = putUpdatePopularRestaurants;
 const getRestaurantById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -137,8 +170,6 @@ const getRestaurantDishesById = async (req, res) => {
 exports.getRestaurantDishesById = getRestaurantDishesById;
 const postAddNewRestaurant = async (req, res) => {
     try {
-        console.log(req.user);
-        console.log(req.body);
         const { restaurantModel, error } = validateAndGetModel(req.body);
         if (error) {
             throw new Error(error.message);
