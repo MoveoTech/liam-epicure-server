@@ -99,10 +99,42 @@ export const getWeeklyChef = async (req: Request, res: Response) => {
                         }
                     }
                 ]
-            }).unwind("chef");
+            })
+            .unwind("chef");
 
         res.send(chef);
     } catch (error: any) {
+        res.status(500).send(error);
+    }
+}
+
+export const putWeeklyChef = async (req: Request, res: Response) => {
+    try {
+        console.log(req.body);
+
+        const chefObj = req.body as IChef;
+        const { error } = validateAndGetModel(chefObj);
+        if (error) {
+            throw new Error(error.message);
+        }
+        // Create a new Weekly Chef object.
+        const chefModel = new WeeklyChefModel({ chef: chefObj, status: 1 });
+
+        // Delete and check results.
+        const deleteResult = await WeeklyChefModel.deleteMany();
+        if (!deleteResult) {
+            throw new Error("Couldn't delete weekly chefs.")
+        }
+
+        // Insert new chef and check results.
+        const insertResult = await WeeklyChefModel.insertMany(chefModel);
+        if (!insertResult) {
+            throw new Error("Couldn't insert weekly chefs.");
+        }
+
+        res.send(insertResult);
+    } catch (error: any) {
+        res.statusMessage = error.message;
         res.status(500).send(error);
     }
 }

@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { deleteChef, getAllChefs, getChefById, getWeeklyChef, postAddNewChef, putUpdateChef } from "../handlers/chefs.handler";
+import { deleteChef, getAllChefs, getChefById, getWeeklyChef, postAddNewChef, putUpdateChef, putWeeklyChef } from "../handlers/chefs.handler";
 import auth from "../middlewares/routeAuth";
 const router: Router = express.Router();
 
@@ -8,6 +8,9 @@ router.get("", auth, getAllChefs);
 
 // Get 'chef of the week'
 router.get("/weekly-chef", getWeeklyChef); // No Auth MW for Epicure users
+
+// Update weekly chef
+router.put("/weekly-chef", auth, putWeeklyChef);
 
 // Add new chef to collection
 router.post("", auth, postAddNewChef);

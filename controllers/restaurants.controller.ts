@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { deleteRestaurant, getAllRestaurants, getPopularRestaurants, getRestaurantById, getRestaurantDishesById, postAddNewRestaurant, putUpdateRestaurant } from "../handlers/restaurants.handler";
+import { deleteRestaurant, getAllRestaurants, getPopularRestaurants, getRestaurantById, getRestaurantDishesById, postAddNewRestaurant, putUpdatePopularRestaurants, putUpdateRestaurant } from "../handlers/restaurants.handler";
 import auth from "../middlewares/routeAuth";
 const router: Router = express.Router();
 
@@ -8,6 +8,9 @@ router.get("", auth, getAllRestaurants);
 
 // Get popular restaurants
 router.get("/popular-restaurants", getPopularRestaurants); // No auth for Epicure users
+
+// Update popular restaurants (ADD AUTH MW)
+router.put("/popular-restaurants", auth, putUpdatePopularRestaurants);
 
 // Add a new restaurant to collection
 router.post("", auth, postAddNewRestaurant);

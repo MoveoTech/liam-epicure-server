@@ -46,7 +46,7 @@ export const getPopularRestaurants = async (req: Request, res: Response) => {
         const popularRestaurants = await PopularRestaurantModel.aggregate()
             .match({ status: 1 })
             .lookup({
-                from: RestaurantModel.collection.name, let: {restaurant: "$restaurant"}, as: "restaurant",
+                from: RestaurantModel.collection.name, let: { restaurant: "$restaurant" }, as: "restaurant",
                 pipeline: [
                     {
                         $match: {
@@ -106,6 +106,43 @@ export const getPopularRestaurants = async (req: Request, res: Response) => {
     }
 }
 
+export const putUpdatePopularRestaurants = async (req: Request, res: Response) => {
+    try {
+        const restObjs = req.body as IRestaurant[];
+
+        // Verify body data and return an IRestaurant interface.
+        const restaurants = restObjs.map((restaurant) => {
+            const { error } = validateAndGetModel(restaurant);
+            if (error) {
+                throw new Error(error.message);
+            }
+            return restaurant;
+        });
+
+        // Convert IRestaurant interfaces to a PopularRestaurantModel
+        const popularRestaurantModels = restaurants.map((rest) => {
+            return new PopularRestaurantModel({ restaurant: rest, status: 1 });
+        })
+
+        // Delete all existing popular restaurants
+        const deleteResult = await PopularRestaurantModel.deleteMany();
+        if (!deleteResult) {
+            throw new Error("Couldn't delete popular restaurants.");
+        }
+
+        // Insert new restaurants
+        const insertResult = await PopularRestaurantModel.insertMany(popularRestaurantModels);
+        if (!insertResult) {
+            throw new Error("Couldn't insert new popular restaurants");
+        }
+
+        res.status(200).send(insertResult);
+    } catch (error: any) {
+        res.statusMessage = error.message;
+        res.status(500).send(error);
+    }
+}
+
 export const getRestaurantById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -135,9 +172,6 @@ export const getRestaurantDishesById = async (req: Request, res: Response) => {
 
 export const postAddNewRestaurant = async (req: Request, res: Response) => {
     try {
-        console.log(req.user);
-        console.log(req.body);
-
         const { restaurantModel, error } = validateAndGetModel(req.body);
         if (error) {
             throw new Error(error.message);

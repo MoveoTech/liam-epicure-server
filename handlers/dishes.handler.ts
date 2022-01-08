@@ -13,7 +13,7 @@ export const getAllDishes = async (req: Request, res: Response) => {
             .unwind({ path: "$restaurant", preserveNullAndEmptyArrays: true })
             .lookup({ from: IconModel.collection.name, localField: "icons", foreignField: "_id", as: "icons" })
         res.send(dishes);
-    } catch (error : any) {
+    } catch (error: any) {
         res.status(500).send(error);
     }
 }
@@ -24,7 +24,7 @@ export const getDishById = async (req: Request, res: Response) => {
         const dish = await DishModel.findOne({ _id: new Types.ObjectId(id), status: 1 });
 
         res.send(dish);
-    } catch (error : any) {
+    } catch (error: any) {
         res.status(500).send(error);
     }
 }
@@ -38,7 +38,44 @@ export const getSignatureDishes = async (req: Request, res: Response) => {
             .lookup({ from: IconModel.collection.name, localField: "dish.icons", foreignField: "_id", as: "dish.icons" });
 
         res.send(dish);
-    } catch (error : any) {
+    } catch (error: any) {
+        res.status(500).send(error);
+    }
+}
+
+export const putSignatureDishes = async (req: Request, res: Response) => {
+    try {
+        const dishObjs = req.body as IDish[];
+
+        // Verify body data and return an IRestaurant interface.
+        const dishes = dishObjs.map((dish) => {
+            const { error } = validateAndGetModel(dish);
+            if (error) {
+                throw new Error(error.message);
+            }
+            return dish;
+        });
+
+        // Convert IDish interfaces to a SignatureDishModel
+        const signatureDishModels = dishes.map((dish) => {
+            return new SignatureDishModel({ dish, status: 1 });
+        })
+
+        // Delete all existing popular restaurants
+        const deleteResult = await SignatureDishModel.deleteMany();
+        if (!deleteResult) {
+            throw new Error("Couldn't delete popular restaurants.");
+        }
+
+        // Insert new restaurants
+        const insertResult = await SignatureDishModel.insertMany(signatureDishModels);
+        if (!insertResult) {
+            throw new Error("Couldn't insert new popular restaurants");
+        }
+
+        res.status(200).send(insertResult);
+    } catch (error: any) {
+        res.statusMessage = error.message;
         res.status(500).send(error);
     }
 }
@@ -52,7 +89,7 @@ export const postAddNewDish = async (req: Request, res: Response) => {
 
         const docResult = await DishModel.collection.insertOne(dishModel);
         res.send(docResult || "Failed to add new document.");
-    } catch (error : any) {
+    } catch (error: any) {
         res.status(500).send(error);
     }
 }

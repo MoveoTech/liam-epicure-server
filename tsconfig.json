@@ -9,7 +9,7 @@
     "outDir": "./dist",
   "typeRoots": ["./@types"]
   },
-  "ts-node": {
-    "require": ["tsconfig-paths/register"]
-  }
+  // "ts-node": {
+  //   "require": ["tsconfig-paths/register"]
+  // }
 }
